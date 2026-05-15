@@ -1,76 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlaceHolder</title>
-  <style>
-    body {
-      background: #0f0f0f;
-      color: #eaeaea;
-      font-family: monospace;
-      padding: 40px;
-      max-width: 800px;
-      margin: auto;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlaceHolder Terminal</title>
 
-    h1 {
-      font-size: 40px;
-    }
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #000000; /* full black screen */
+    color: #00ff9c;
+    font-family: monospace;
+    overflow: hidden;
+  }
 
-    .tag {
-      color: #888;
-      margin-bottom: 30px;
-    }
+  .terminal {
+    padding: 20px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-    .box {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #333;
-      border-radius: 10px;
-      background: #151515;
-    }
+  .line {
+    white-space: pre-wrap;
+    margin-bottom: 6px;
+  }
 
-    .dim {
-      color: #aaa;
-    }
+  .input-line {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    width: calc(100% - 40px);
+  }
 
-    .warning {
-      color: #ff5c5c;
-    }
-  </style>
+  input {
+    background: none;
+    border: none;
+    color: #00ff9c;
+    font-family: monospace;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+  }
+
+  .prompt {
+    margin-right: 8px;
+  }
+
+  .dim {
+    color: #666;
+  }
+
+  #output {
+    padding-bottom: 60px;
+  }
+</style>
 </head>
+
 <body>
+<div class="terminal" id="terminal">
 
-  <h1>PlaceHolder</h1>
-  <div class="tag">a terminal thingy that exists</div>
+  <div class="line">PlaceHolder Terminal v0.0.1</div>
+  <div class="line dim">type "help" for stuff (or don't)</div>
+  <br/>
 
-  <div class="box">
-    <p>uhhh it sometimes work. maybe not. idk. free also. uhhh yeah.</p>
+  <div id="output"></div>
+
+  <div class="input-line">
+    <span class="prompt">user@placeholder:~$</span>
+    <input id="cmd" autofocus />
   </div>
 
-  <div class="box">
-    <h3>what it does</h3>
-    <ul>
-      <li>downloads stuff (if you're lucky)</li>
-      <li>updates stuff (not tested, won't test it)</li>
-      <li>runs stuff (probably)</li>
-      <li class="dim"> it basically a lazy command line</li>
-    </ul>
-  </div>
+</div>
 
-  <div class="box">
-    <h3>extra info</h3>
-    <p>
-      there was going to be a music feature but i forgot music was a thing<br/>
-      <span class="warning">also, no im not tobyfox</span>
-    </p>
-  </div>
+<script>
+const output = document.getElementById("output");
+const input = document.getElementById("cmd");
 
-  <div class="box">
-    <h3>why the name?</h3>
-    <p>uhh, I forgot to buy my name changing subscription.</p>
-  </div>
+function print(text) {
+  const div = document.createElement("div");
+  div.className = "line";
+  div.textContent = text;
+  output.appendChild(div);
+}
+function downloadFile() {
+  const url = "https://raw.githubusercontent.com/USERNAME/REPO/BRANCH/Download";
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Download"; // forces download name in most browsers
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  print("fetching file from repo...");
+}
+
+function runCommand(cmd) {
+  print("user@placeholder:~$ " + cmd);
+
+  switch(cmd.trim().toLowerCase()) {
+    case "help":
+      print("commands:");
+      print("- help");
+      print("- about");
+      print("- download");
+      print("- update");
+      print("- music (broken)");
+      break;
+
+    case "about":
+      print("PlaceHolder is a terminal thingy.");
+      print("it tries its best.");
+      break;
+
+    case "download":
+      print("initiating download...");
+      downloadFile();
+      print("file dropped: Download");
+      break;
+
+    case "update":
+      print("checking updates...");
+      print("update system not tested");
+      break;
+
+    case "music":
+      print("feature removed.");
+      print("no im not tobyfox");
+      break;
+
+    case "":
+      break;
+
+    default:
+      print("command not found: " + cmd);
+      break;
+  }
+
+  print("");
+}
+
+input.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    runCommand(input.value);
+    input.value = "";
+  }
+});
+</script>
 
 </body>
 </html>
